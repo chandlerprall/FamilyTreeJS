@@ -1,0 +1,96 @@
+============================== LICENSE ==============================
+
+Copyright (c) 2011 Chandler Prall, chandler.prall@gmail.com
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+============================== Instruction ==============================
+
+FamilyTreeJS is very easy to use. Of course, the first step is to include
+the Javascript file in the <head/> section of your HTML document.
+
+After familytree.js has been included you include the code to build your own
+family tree . You will need to wrap your code in some way to prevent its
+execution until after the DOM has loaded. For example, with jQuery you would
+wrap your family tree code with:
+
+$(document).ready(function() {
+	// [ ... you code here ... ]
+});
+
+
+
+** Example:
+
+  var tree = new FamilyTreeJS.FamilyTree();
+  var chandler = tree.AddPerson('Chandler');
+  var moriah = tree.AddPerson('Moriah');
+  chandler.birth('Roan', {partner: moriah});
+  tree.Render(document.getElementById('dom_element'));
+
+This will generate a tree showing Chandler and Moriah having a child named Roan.
+Any person on the tree who does not have a parent should be added by tree.AddPerson().
+
+To avoid having to instantiate a variable for each person in the tree you
+can chain any number of births together:
+
+  var roan = tree.AddPerson('Robert').
+  	birth('Allen').
+  	birth('Chandler').
+  	birth('Roan');
+
+Obviously this is a pretty boring family tree. There is nothing defining
+any of the mothers. It is simple to add them in, however.
+
+  var roan = tree.AddPerson('Robert').
+  	birth('Allen', {partner: tree.AddPerson('Arlene')}).
+  	birth('Chandler', {partner: tree.AddPerson('Leslie')}).
+  	birth('Roan', {partner: tree.AddPerson('Roan')});
+
+Admittedly this syntax is a little confusing because, at first glance, it's easy
+to think Chandler was born to Allen and Arlene when his parents are
+actually Allen and Leslie. It just takes getting used to.
+
+Those are some simple trees, now for something a bit
+more complex: joining two branches.
+
+  var tree = new FamilyTreeJS.FamilyTree();
+  
+  var henry_i = tree.AddPerson('Robert the 1st').
+  	birth('William the Conqueror').
+  	birth('Henry the 1st');
+  	
+  var edith = tree.AddPerson('Duncan the 1st').
+    birth('Malcolm the 3rd').
+    birth('Edith');
+    
+  var matilda = henry_i.birth('Matilda', {partner: edith});
+
+
+A full example of the library's use can be viewed at
+http://chandler.prallfamily.com/2011/05/my-family-tree/
+
+Code for that example is located at
+http://chandler.prallfamily.com/wp-content/js/pralls.js
+
+All bugs, questions, or suggestions are welcome at
+FamilyTreeJS's Github repo,
+https://github.com/chandlerprall/FamilyTreeJS
